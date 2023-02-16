@@ -1,15 +1,15 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, ButtonHTMLAttributes } from "react";
 import "./button.styles.scss";
 
-type ButtonProps = {
-  children: ReactNode;
-  htmlType?: "button" | "submit" | "reset";
-  type?: "google-sign-in" | "inverted";
-};
 
-const Button = ({ children, htmlType, type }: ButtonProps) => {
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  children: ReactNode;
+  buttonType?: "google-sign-in" | "inverted";
+}
+
+const Button = ({ children, buttonType, ...buttonProps }: ButtonProps) => {
   return (
-    <button className={`button-container ${type}`} type={htmlType}>
+    <button onClick={(event)=>{}} className={`button-container ${buttonType}`} {...buttonProps}>
       {children}
     </button>
   );

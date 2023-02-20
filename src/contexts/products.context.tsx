@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import SHOP_DATA from "../shop-data.json";
 
-type Product = { id: number; name: string; imageUrl: string; price: number }
+export type Product = { id: number; name: string; imageUrl: string; price: number }
 
 type ProductsContextType = {
   products: Product[];

@@ -7,9 +7,9 @@ const Shop = () => {
   const { products } = useProductsContext();
   return (
     <div className="products-container" >
-      {products.map(({ name, id, imageUrl, price }) => (
-        <ProductCard key={id} imageUrl={imageUrl} name={name} price={price} />
-      ))}
+      {products.length !== 0?products.map((product) => (
+        <ProductCard product={product} key={product.id} />
+      )):null}
     </div>
   );
 };

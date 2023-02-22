@@ -9,9 +9,9 @@ type ProductCardProps = {
 }
 const ProductCard = ({product}: ProductCardProps) => {
   const { imageUrl, name, price } = product;
-  const { addItemToCart } = useCartContext()
+  const { addCartItem } = useCartContext()
   const handleAddToCart = ()=>{
-    addItemToCart(product)
+    addCartItem(product)
   }
   return (
 

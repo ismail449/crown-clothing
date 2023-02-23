@@ -6,7 +6,7 @@ import React, {
   ReactNode,
   Dispatch,
 } from "react";
-import { Product } from "./products.context";
+import { Product } from "./categories.context";
 
 const addItemToCart = (cartItems: CartItem[], product: Product) => {
   const foundProductIndex = cartItems.findIndex(({ id }) => product.id === id);

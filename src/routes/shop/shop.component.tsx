@@ -1,16 +1,31 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import ProductCard from "../../components/product-card/product-card.component";
-import { useProductsContext } from "../../contexts/products.context";
-import './shop.styles.scss'
+import {
+  Product,
+  useCategoriesContext,
+} from "../../contexts/categories.context";
+import "./shop.styles.scss";
 
 const Shop = () => {
-  const { products } = useProductsContext();
+  const navigate = useNavigate();
+
+  const { categoriesMap } = useCategoriesContext();
   return (
-    <div className="products-container" >
-      {products.length !== 0?products.map((product) => (
-        <ProductCard product={product} key={product.id} />
-      )):null}
-    </div>
+    <>
+      {Object.keys(categoriesMap).map((title) => {
+        return (
+          <div key={title}>
+            <h2 onClick={() => navigate(`/shop/${title}`)}>{title}</h2>
+            <div className="products-container">
+              {categoriesMap[title].slice(0, 4).map((product: Product) => (
+                <ProductCard product={product} key={product.id} />
+              ))}
+            </div>
+          </div>
+        );
+      })}
+    </>
   );
 };
 

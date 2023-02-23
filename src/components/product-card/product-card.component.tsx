@@ -1,27 +1,28 @@
 import React from "react";
 import Button from "../button/button.component";
-import { Product } from "../../contexts/products.context";
+import { Product } from "../../contexts/categories.context";
 import { useCartContext } from "../../contexts/cart.context";
 import "./product-card.styles.scss";
 
 type ProductCardProps = {
-  product: Product
-}
-const ProductCard = ({product}: ProductCardProps) => {
+  product: Product;
+};
+const ProductCard = ({ product }: ProductCardProps) => {
   const { imageUrl, name, price } = product;
-  const { addCartItem } = useCartContext()
-  const handleAddToCart = ()=>{
-    addCartItem(product)
-  }
+  const { addCartItem } = useCartContext();
+  const handleAddToCart = () => {
+    addCartItem(product);
+  };
   return (
-
     <div className="product-card-container">
-      <img src={imageUrl} alt={name}/>
+      <img src={imageUrl} alt={name} />
       <div className="footer">
         <span className="name">{name}</span>
         <span className="price">{price}</span>
       </div>
-      <Button onClick={handleAddToCart} buttonType="inverted">add to cart</Button>
+      <Button onClick={handleAddToCart} buttonType="inverted">
+        add to cart
+      </Button>
     </div>
   );
 };

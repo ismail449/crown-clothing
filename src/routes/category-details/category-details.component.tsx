@@ -1,28 +1,33 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
   Product,
   useCategoriesContext,
 } from "../../contexts/categories.context";
 import ProductCard from "../../components/product-card/product-card.component";
-import "./category-preview.styles.scss";
+import "./category-details.styles.scss";
 
 const CategoryDetails = () => {
-  const { pageId } = useParams();
+  const { category } = useParams();
   const { categoriesMap } = useCategoriesContext();
-  if (pageId && categoriesMap[pageId]) {
-    return (
-      <div className="category-preview-container">
-        <h2 className="title">{pageId}</h2>
-        <div className="preview">
-          {categoriesMap[pageId].map((product: Product) => (
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    if (category) {
+      setProducts(categoriesMap[category]);
+    }
+  }, [categoriesMap, category]);
+  return (
+    <div>
+      <h2>{category}</h2>
+      <div className="category-details-container">
+        {products &&
+          products.map((product: Product) => (
             <ProductCard product={product} key={product.id} />
           ))}
-        </div>
       </div>
-    );
-  }
-  return <h2>Loading...</h2>;
+    </div>
+  );
 };
 
 export default CategoryDetails;

@@ -5,7 +5,10 @@ import {
   useCategoriesContext,
 } from "../../contexts/categories.context";
 import ProductCard from "../../components/product-card/product-card.component";
-import "./category-details.styles.scss";
+import {
+  CategoryDetailsContainer,
+  CategoryDetailsTitle,
+} from "./category-details.styles";
 
 const CategoryDetails = () => {
   const { category } = useParams();
@@ -18,15 +21,17 @@ const CategoryDetails = () => {
     }
   }, [categoriesMap, category]);
   return (
-    <div>
-      <h2>{category}</h2>
-      <div className="category-details-container">
+    <>
+      <CategoryDetailsTitle>
+        {category?.toLocaleUpperCase()}
+      </CategoryDetailsTitle>
+      <CategoryDetailsContainer>
         {products &&
           products.map((product: Product) => (
             <ProductCard product={product} key={product.id} />
           ))}
-      </div>
-    </div>
+      </CategoryDetailsContainer>
+    </>
   );
 };
 

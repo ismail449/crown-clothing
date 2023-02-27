@@ -1,23 +1,21 @@
 import React, { InputHTMLAttributes } from "react";
-import './form-input.styles.scss'
+import { Group, Input, FormInputLabel } from "./form-input.styles";
 
 interface FormInputProps extends InputHTMLAttributes<HTMLInputElement> {
   title?: string;
 }
 const FormInput = ({ title, ...otherProps }: FormInputProps) => {
   return (
-    <div className="group">
-      <input className="form-input" {...otherProps} />
+    <Group>
+      <Input {...otherProps} />
       {title ? (
-        <label
-          className={`${
-            otherProps.value?.toString().length ? "shrink" : ""
-          } form-input-label`}
+        <FormInputLabel
+          shrink={otherProps.value?.toLocaleString().length ? true : false}
         >
           {title}
-        </label>
+        </FormInputLabel>
       ) : null}
-    </div>
+    </Group>
   );
 };
 

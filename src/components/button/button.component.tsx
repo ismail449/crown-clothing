@@ -19,6 +19,7 @@ const getButton = (buttonType = "base") =>
 
 const Button = ({ children, buttonType, ...buttonProps }: ButtonProps) => {
   const CustomButton = getButton(buttonType);
+  //@ts-ignore
   return <CustomButton {...buttonProps}>{children}</CustomButton>;
 };
 

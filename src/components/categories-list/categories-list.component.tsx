@@ -2,10 +2,10 @@ import React from "react";
 import CategoryItem from "../category-item/category-item.component";
 import { CategoriesContainer } from "./categories-list.styles";
 
-type categoriesProps = {
+/*type categoriesProps = {
   categories: { id: number; title: string; imageUrl: string }[];
 };
-
+*/
 const categories: { id: number; title: string; imageUrl: string }[] = [
   {
     id: 1,

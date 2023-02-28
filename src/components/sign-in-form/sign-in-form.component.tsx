@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { FirebaseError } from "firebase/app";
 import {
   signInUserWithEmailAndPassword,
   signInWithGooglePopup,
@@ -33,15 +34,17 @@ const SignInForm = () => {
       await signInUserWithEmailAndPassword(email, password);
       resetFormFields();
     } catch (error) {
-      switch (error.code) {
-        case "auth/wrong-password":
-          alert(`Error wrong password`);
-          break;
-        case "auth/user-not-found":
-          alert("User not Found");
-          break;
-        default:
-          console.log(error);
+      if (error instanceof FirebaseError) {
+        switch (error.code) {
+          case "auth/wrong-password":
+            alert(`Error wrong password`);
+            break;
+          case "auth/user-not-found":
+            alert("User not Found");
+            break;
+          default:
+            console.log(error);
+        }
       }
     }
   };
@@ -70,7 +73,9 @@ const SignInForm = () => {
           required
         />
         <ButtonsContainer>
-          <Button buttonType="base" type="submit">sign in</Button>
+          <Button buttonType="base" type="submit">
+            sign in
+          </Button>
           <Button
             type="button"
             onClick={signInWithGoogle}

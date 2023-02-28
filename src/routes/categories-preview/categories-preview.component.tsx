@@ -1,5 +1,5 @@
-import React from "react";
 import CategoryPreview from "../../components/category-preview/category-preview.component";
+import { Product } from "../../contexts/categories.context";
 import { useCategoriesContext } from "../../contexts/categories.context";
 
 const CategoriesPreview = () => {
@@ -11,7 +11,7 @@ const CategoriesPreview = () => {
           <CategoryPreview
             key={title}
             title={title}
-            products={categoriesMap[title]}
+            products={categoriesMap[title as keyof typeof categoriesMap]}
           />
         );
       })}

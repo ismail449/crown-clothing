@@ -8,9 +8,9 @@ import {
   Title,
 } from "./category-preview.styles";
 
-type categoriesProps = { title: string; products: Product[] };
+type CategoryPreviewProps = { title: string; products: Product[] };
 
-const CategoryPreview = ({ title, products }: categoriesProps) => {
+const CategoryPreview = ({ title, products }: CategoryPreviewProps) => {
   return (
     <CategoryPreviewContainer>
       <Title>

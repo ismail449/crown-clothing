@@ -6,7 +6,12 @@ import {
   CategoryContainer,
 } from "./category-item.styles";
 
-const CategoryItem = ({ title, imageUrl }) => {
+type CategoryItemProps = {
+  title: string;
+  imageUrl: string;
+};
+
+const CategoryItem = ({ title, imageUrl }: CategoryItemProps) => {
   const navigate = useNavigate();
   const handleNavigate = () => {
     navigate(`./shop/${title}`);

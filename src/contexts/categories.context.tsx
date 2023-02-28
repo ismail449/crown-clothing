@@ -14,7 +14,7 @@ export type Product = {
   price: number;
 };
 
-//export type Category = { title: string; items: Product[] };
+export type Category = { title: string; items: Product[] };
 
 type CategoriesContextType = {
   categoriesMap: {};

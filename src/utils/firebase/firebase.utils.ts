@@ -67,6 +67,7 @@ export const getCategoriesAndDocuments = async () => {
 
   const categoryMap = snapShot.docs.reduce((acc, docSnapshot) => {
     const { title, items } = docSnapshot.data();
+    //@ts-ignore
     acc[title.toLocaleLowerCase()] = items;
     return acc;
   }, {});
@@ -92,7 +93,9 @@ export const createUserDocumentFromAuth = async (
         ...additionalInfo,
       });
     } catch (error) {
-      console.log("Error creating the user: ", error.message);
+      if (error instanceof Error) {
+        console.log("Error creating the user: ", error.message);
+      }
     }
   }
   return userDocRef;

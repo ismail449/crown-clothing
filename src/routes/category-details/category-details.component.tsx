@@ -17,7 +17,7 @@ const CategoryDetails = () => {
 
   useEffect(() => {
     if (category) {
-      setProducts(categoriesMap[category]);
+      setProducts(categoriesMap[category as keyof typeof categoriesMap]);
     }
   }, [categoriesMap, category]);
   return (

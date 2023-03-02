@@ -1,6 +1,5 @@
-import React from "react";
 import Button from "../button/button.component";
-import { Product } from "../../contexts/categories.context";
+import { Product } from "../../store/category/category.reducer";
 import { useCartContext } from "../../contexts/cart.context";
 import {
   ProductCardContainer,

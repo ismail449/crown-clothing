@@ -12,10 +12,3 @@ export const CategoryDetailsTitle = styled.h2`
   margin-bottom: 25px;
   text-align: center;
 `;
-
-/*.category-details-container {
-  
-}
-.category-details-title {
-  
-}*/

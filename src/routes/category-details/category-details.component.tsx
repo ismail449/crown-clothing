@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import {
-  Product,
-  useCategoriesContext,
-} from "../../contexts/categories.context";
+import { Product } from "../../store/category/category.reducer";
 import ProductCard from "../../components/product-card/product-card.component";
+import { selectCategoriesMap } from "../../store/category/category.selector";
 import {
   CategoryDetailsContainer,
   CategoryDetailsTitle,
@@ -12,12 +11,12 @@ import {
 
 const CategoryDetails = () => {
   const { category } = useParams();
-  const { categoriesMap } = useCategoriesContext();
+  const categoriesMap = useSelector(selectCategoriesMap);
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
     if (category) {
-      setProducts(categoriesMap[category as keyof typeof categoriesMap]);
+      setProducts(categoriesMap[category]);
     }
   }, [categoriesMap, category]);
   return (

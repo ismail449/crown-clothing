@@ -1,6 +1,6 @@
 import { createContext, useReducer, useContext, ReactNode } from "react";
 import CartItem from "../components/cart-item/cart-item.component";
-import { Product } from "./categories.context";
+import { Product } from "../store/category/category.reducer";
 
 export type CartItem = {
   id: number;

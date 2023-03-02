@@ -1,9 +1,9 @@
+import { useSelector } from "react-redux";
 import CategoryPreview from "../../components/category-preview/category-preview.component";
-import { Product } from "../../contexts/categories.context";
-import { useCategoriesContext } from "../../contexts/categories.context";
+import { selectCategoriesMap } from "../../store/category/category.selector";
 
 const CategoriesPreview = () => {
-  const { categoriesMap } = useCategoriesContext();
+  const categoriesMap = useSelector(selectCategoriesMap);
   return (
     <>
       {Object.keys(categoriesMap).map((title) => {
@@ -11,7 +11,7 @@ const CategoriesPreview = () => {
           <CategoryPreview
             key={title}
             title={title}
-            products={categoriesMap[title as keyof typeof categoriesMap]}
+            products={categoriesMap[title]}
           />
         );
       })}

@@ -5,7 +5,7 @@ type InitialStateType = {
   categories: DocumentData[];
 };
 
-export const CATEGORIES_INITIAL_STATE: InitialStateType = {
+const CATEGORIES_INITIAL_STATE: InitialStateType = {
   categories: [],
 };
 

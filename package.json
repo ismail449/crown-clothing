@@ -22,6 +22,7 @@
     "recharts": "^2.3.2",
     "redux": "^4.2.1",
     "redux-logger": "^3.0.6",
+    "redux-persist": "^6.0.0",
     "reselect": "^4.1.7",
     "sass": "^1.57.1",
     "sort-by": "^1.2.0",

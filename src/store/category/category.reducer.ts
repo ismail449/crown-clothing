@@ -37,6 +37,7 @@ export const categoryReducer = (
     case FETCH_CATEGORIES_FAILED:
       return { ...state, error: payload, isLoading: false };
     case FETCH_CATEGORIES_SUCCESS:
+      console.log("scceeff");
       return { ...state, categories: payload, isLoading: false };
 
     default:

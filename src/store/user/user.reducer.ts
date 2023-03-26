@@ -5,7 +5,6 @@ import {
   SIGN_OUT_FAILED,
   SIGN_OUT_SUCCESS,
   SIGN_UP_FAILED,
-  SIGN_UP_SUCCESS,
 } from "./user.types";
 
 type initialStateType = {

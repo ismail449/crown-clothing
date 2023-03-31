@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Product } from "../../store/category/category.reducer";
+import { Product } from "../../store/category/category.types";
 import ProductCard from "../product-card/product-card.component";
 import {
   CategoryPreviewContainer,

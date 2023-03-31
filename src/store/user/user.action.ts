@@ -2,7 +2,6 @@ import {
   CHECK_USER_SESSION,
   EMAIL_SIGN_IN_START,
   GOOGLE_SIGN_IN_START,
-  SET_CURRENT_USER,
   SIGN_IN_FAILED,
   SIGN_IN_SUCCESS,
   SIGN_OUT_FAILED,
@@ -12,65 +11,58 @@ import {
   SIGN_UP_START,
   SIGN_UP_SUCCESS,
 } from "./user.types";
+import {
+  withMatcher,
+  Action,
+  ActionWithPayload,
+  createAction,
+} from "../../utils/reducer/reducer.utils";
 import { User } from "firebase/auth";
+import { UserData } from "../../utils/firebase/firebase.utils";
 
-export const setCurrentUser = (user: User | null) => {
-  return {
-    type: SET_CURRENT_USER,
-    payload: user,
-  };
-};
+export type SignInSuccess = ActionWithPayload<typeof SIGN_IN_SUCCESS, UserData>;
+export type CheckUserSession = Action<typeof CHECK_USER_SESSION>;
+export type SignOutSuccess = Action<typeof SIGN_OUT_SUCCESS>;
+export type SignInFailed = ActionWithPayload<typeof SIGN_IN_FAILED, Error>;
+export type SignOutFailed = ActionWithPayload<typeof SIGN_OUT_FAILED, Error>;
+export type SignUpFailed = ActionWithPayload<typeof SIGN_UP_FAILED, Error>;
 
-export const checkUserSession = () => {
-  return {
-    type: CHECK_USER_SESSION,
-  };
-};
+export const signInSuccess = withMatcher(
+  (user: UserData & { id: string }): SignInSuccess => {
+    return createAction(SIGN_IN_SUCCESS, user);
+  }
+);
+
+export const signOutSuccess = withMatcher((): SignOutSuccess => {
+  return createAction(SIGN_OUT_SUCCESS);
+});
+
+export const signInFailed = withMatcher((error: Error): SignInFailed => {
+  return createAction(SIGN_IN_FAILED, error);
+});
+
+export const signOutFailed = withMatcher((error: Error): SignOutFailed => {
+  return createAction(SIGN_OUT_FAILED, error);
+});
+
+export const signUpFailed = withMatcher((error: Error): SignUpFailed => {
+  return createAction(SIGN_UP_FAILED, error);
+});
+
+export const checkUserSession = withMatcher((): CheckUserSession => {
+  return createAction(CHECK_USER_SESSION);
+});
 
 export const googleSignInStart = () => {
-  return {
-    type: GOOGLE_SIGN_IN_START,
-  };
+  return createAction(GOOGLE_SIGN_IN_START);
 };
 
 export const emailSingInStart = (email: string, password: string) => {
-  return {
-    type: EMAIL_SIGN_IN_START,
-    payload: { email, password },
-  };
-};
-
-export const signInSuccess = (user: {}) => {
-  return {
-    type: SIGN_IN_SUCCESS,
-    payload: user,
-  };
-};
-
-export const signInFailed = (error: Error) => {
-  return {
-    type: SIGN_IN_FAILED,
-    payload: error,
-  };
+  return createAction(EMAIL_SIGN_IN_START, { email, password });
 };
 
 export const signOutStart = () => {
-  return {
-    type: SIGN_OUT_START,
-  };
-};
-
-export const signOutSuccess = () => {
-  return {
-    type: SIGN_OUT_SUCCESS,
-  };
-};
-
-export const signOutFailed = (error: Error) => {
-  return {
-    type: SIGN_OUT_FAILED,
-    payload: error,
-  };
+  return createAction(SIGN_OUT_START);
 };
 
 export const signUpStart = (
@@ -78,22 +70,9 @@ export const signUpStart = (
   password: string,
   displayName: string
 ) => {
-  return {
-    type: SIGN_UP_START,
-    payload: { email, password, displayName },
-  };
+  return createAction(SIGN_UP_START, { email, password, displayName });
 };
 
-export const signUpSuccess = (user: User | null, additionalInfo: string) => {
-  return {
-    type: SIGN_UP_SUCCESS,
-    payload: { user, additionalInfo },
-  };
-};
-
-export const signUpFailed = (error: Error) => {
-  return {
-    type: SIGN_UP_FAILED,
-    payload: error,
-  };
+export const signUpSuccess = (user: User, additionalInfo: string) => {
+  return createAction(SIGN_UP_SUCCESS, { user, additionalInfo });
 };

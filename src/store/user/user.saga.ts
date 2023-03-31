@@ -1,6 +1,6 @@
-import { User } from "firebase/auth";
-import { DocumentData, DocumentSnapshot } from "firebase/firestore";
-import { takeLatest, put, all, call } from "redux-saga/effects";
+import { FirebaseError } from "firebase/app";
+import { AuthErrorCodes, User } from "firebase/auth";
+import { takeLatest, put, all, call } from "typed-redux-saga/macro";
 import {
   getCurrentUser,
   createUserDocumentFromAuth,
@@ -8,6 +8,7 @@ import {
   signInUserWithEmailAndPassword,
   signOutUser,
   createAuthUserWithEmailAndPassword,
+  AdditionalInfo,
 } from "../../utils/firebase/firebase.utils";
 
 import {
@@ -27,42 +28,49 @@ import {
   SIGN_UP_SUCCESS,
 } from "./user.types";
 
-export function* getSnapshotFromUserAuth(userAuth: User, additionalInfo = {}) {
+export function* getSnapshotFromUserAuth(
+  userAuth: User,
+  additionalInfo?: AdditionalInfo
+) {
   try {
-    const userSnapshot: DocumentSnapshot<DocumentData> = yield call(
+    const userSnapshot = yield* call(
       createUserDocumentFromAuth,
       userAuth,
       additionalInfo
     );
-    yield put(signInSuccess({ id: userSnapshot.id, ...userSnapshot.data() }));
+    if (userSnapshot) {
+      yield* put(
+        signInSuccess({ id: userSnapshot.id, ...userSnapshot.data() })
+      );
+    }
   } catch (error) {
     if (error instanceof Error) {
-      yield put(signInFailed(error));
+      yield* put(signInFailed(error));
     }
   }
 }
 
 export function* isUserAuthenticated() {
   try {
-    const authUser: User | null = yield call(getCurrentUser);
+    const authUser = yield* call(getCurrentUser);
     if (!authUser) {
       return;
     }
-    yield call(getSnapshotFromUserAuth, authUser);
+    yield* call(getSnapshotFromUserAuth, authUser);
   } catch (error) {
     if (error instanceof Error) {
-      yield put(signInFailed(error));
+      yield* put(signInFailed(error));
     }
   }
 }
 
 export function* signInWithGoogle() {
   try {
-    const { user } = yield call(signInWithGooglePopup);
-    yield call(getSnapshotFromUserAuth, user);
+    const { user } = yield* call(signInWithGooglePopup);
+    yield* call(getSnapshotFromUserAuth, user);
   } catch (error) {
     if (error instanceof Error) {
-      yield put(signInFailed(error));
+      yield* put(signInFailed(error));
     }
   }
 }
@@ -75,37 +83,36 @@ export function* signInWithEmail({
 }) {
   const { email, password } = payload;
   try {
-    const { user } = yield call(
+    const { user } = yield* call(
       signInUserWithEmailAndPassword,
       email,
       password
     );
-    yield call(getSnapshotFromUserAuth, user);
+    yield* call(getSnapshotFromUserAuth, user);
   } catch (error) {
     if (error instanceof Error) {
-      yield put(signInFailed(error));
+      yield* put(signInFailed(error));
     }
   }
 }
 
 export function* signOut() {
   try {
-    yield call(signOutUser);
-    yield put(signOutSuccess());
+    yield* call(signOutUser);
+    yield* put(signOutSuccess());
   } catch (error) {
-    if (error instanceof Error) yield put(signOutFailed(error));
+    if (error instanceof Error) yield* put(signOutFailed(error));
   }
 }
 
 export function* singInAfterSignUp({
   payload,
 }: {
-  payload: { user: User | null; additionalInfo: string };
+  payload: { user: User; additionalInfo: string };
   type: string;
 }) {
   const { additionalInfo, user } = payload;
-  //@ts-ignore
-  yield call(getSnapshotFromUserAuth, user, { displayName: additionalInfo });
+  yield* call(getSnapshotFromUserAuth, user, { displayName: additionalInfo });
 }
 
 export function* signUp({
@@ -116,44 +123,49 @@ export function* signUp({
 }) {
   const { email, password, displayName } = payload;
   try {
-    const { user } = yield call(
+    const { user } = yield* call(
       createAuthUserWithEmailAndPassword,
       email,
       password
     );
-    yield put(signUpSuccess(user, displayName));
+    yield* put(signUpSuccess(user, displayName));
   } catch (error) {
-    if (error instanceof Error) {
-      yield put(signUpFailed(error));
+    if (error instanceof FirebaseError) {
+      if (error.code === AuthErrorCodes.EMAIL_EXISTS) {
+        yield alert("Email already used please use another email");
+      } else {
+        yield alert("Could not sign up" + error.message);
+      }
+      yield* put(signUpFailed(error));
     }
   }
 }
 
 export function* onCheckUserSession() {
-  yield takeLatest(CHECK_USER_SESSION, isUserAuthenticated);
+  yield* takeLatest(CHECK_USER_SESSION, isUserAuthenticated);
 }
 
 export function* onGoogleSignInStart() {
-  yield takeLatest(GOOGLE_SIGN_IN_START, signInWithGoogle);
+  yield* takeLatest(GOOGLE_SIGN_IN_START, signInWithGoogle);
 }
 
 export function* onUserEmailSignInStart() {
-  yield takeLatest(EMAIL_SIGN_IN_START, signInWithEmail);
+  yield* takeLatest(EMAIL_SIGN_IN_START, signInWithEmail);
 }
 
 export function* onSignOutUser() {
-  yield takeLatest(SIGN_OUT_START, signOut);
+  yield* takeLatest(SIGN_OUT_START, signOut);
 }
 
 export function* onSignUpUser() {
-  yield takeLatest(SIGN_UP_START, signUp);
+  yield* takeLatest(SIGN_UP_START, signUp);
 }
 
 export function* onSignUpSuccess() {
-  yield takeLatest(SIGN_UP_SUCCESS, singInAfterSignUp);
+  yield* takeLatest(SIGN_UP_SUCCESS, singInAfterSignUp);
 }
 export function* userSaga() {
-  yield all([
+  yield* all([
     call(onCheckUserSession),
     call(onGoogleSignInStart),
     call(onUserEmailSignInStart),

@@ -1,16 +1,17 @@
-import { User } from "firebase/auth";
+import { AnyAction } from "redux";
 import {
-  SIGN_IN_FAILED,
-  SIGN_IN_SUCCESS,
-  SIGN_OUT_FAILED,
-  SIGN_OUT_SUCCESS,
-  SIGN_UP_FAILED,
-} from "./user.types";
+  signInSuccess,
+  signInFailed,
+  signOutFailed,
+  signUpFailed,
+  signOutSuccess,
+} from "./user.action";
+import { UserData } from "../../utils/firebase/firebase.utils";
 
 type initialStateType = {
-  currentUser: User | null;
-  isLoading: boolean;
-  error: Error | null;
+  readonly currentUser: UserData | null;
+  readonly isLoading: boolean;
+  readonly error: Error | null;
 };
 
 const INITIAL_STATE: initialStateType = {
@@ -21,19 +22,22 @@ const INITIAL_STATE: initialStateType = {
 
 export const userReducer = (
   state = INITIAL_STATE,
-  action: { type: string; payload: any }
-) => {
-  const { type, payload } = action;
-  switch (type) {
-    case SIGN_IN_SUCCESS:
-      return { ...state, currentUser: payload };
-    case SIGN_IN_FAILED:
-    case SIGN_OUT_FAILED:
-    case SIGN_UP_FAILED:
-      return { ...state, error: payload };
-    case SIGN_OUT_SUCCESS:
-      return { ...state, currentUser: null };
-    default:
-      return state;
+  action: AnyAction
+): initialStateType => {
+  if (signInSuccess.match(action)) {
+    return { ...state, currentUser: action.payload };
   }
+
+  if (
+    signInFailed.match(action) ||
+    signOutFailed.match(action) ||
+    signUpFailed.match(action)
+  ) {
+    return { ...state, error: action.payload };
+  }
+
+  if (signOutSuccess.match(action)) {
+    return { ...state, currentUser: null };
+  }
+  return state;
 };

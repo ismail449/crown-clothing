@@ -1,4 +1,4 @@
-import React, { ReactNode, ButtonHTMLAttributes } from "react";
+import { ButtonHTMLAttributes, FC } from "react";
 import {
   BaseButton,
   GoogleSignInButton,
@@ -7,7 +7,6 @@ import {
 } from "./button.styles";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  children: ReactNode;
   buttonType: "google-sign-in" | "inverted" | "base";
   isLoading?: boolean;
 }
@@ -19,12 +18,12 @@ const getButton = (buttonType = "base") =>
     inverted: InvertedButton,
   }[buttonType]);
 
-const Button = ({
+const Button: FC<ButtonProps> = ({
   children,
   buttonType,
   isLoading = false,
   ...buttonProps
-}: ButtonProps) => {
+}) => {
   const CustomButton = getButton(buttonType);
 
   return (

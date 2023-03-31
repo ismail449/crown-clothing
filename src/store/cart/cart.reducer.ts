@@ -1,9 +1,10 @@
+import { AnyAction } from "redux";
+import { setCartItems, setIsCartOpen } from "./cart.action";
 import { CartItem } from "./cart.custom-types";
-import { TOGGLE_CART, SET_CART_ITEMS } from "./cart.types";
 
 type CartInitialStateType = {
-  isCartOpen: boolean;
-  cartItems: CartItem[];
+  readonly isCartOpen: boolean;
+  readonly cartItems: CartItem[];
 };
 
 const CART_INITIAL_STATE: CartInitialStateType = {
@@ -13,18 +14,14 @@ const CART_INITIAL_STATE: CartInitialStateType = {
 
 export const cartReducer = (
   state = CART_INITIAL_STATE,
-  action: {
-    type: string;
-    payload: CartItem[] | boolean;
+  action = {} as AnyAction
+): CartInitialStateType => {
+  if (setCartItems.match(action)) {
+    return { ...state, cartItems: action.payload };
   }
-) => {
-  const { type, payload } = action;
-  switch (type) {
-    case SET_CART_ITEMS:
-      return { ...state, cartItems: payload as CartItem[] };
-    case TOGGLE_CART:
-      return { ...state, isCartOpen: payload as boolean };
-    default:
-      return state;
+
+  if (setIsCartOpen.match(action)) {
+    return { ...state, isCartOpen: action.payload };
   }
+  return state;
 };

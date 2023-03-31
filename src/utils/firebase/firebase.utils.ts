@@ -19,8 +19,9 @@ import {
   writeBatch,
   query,
   getDocs,
+  QueryDocumentSnapshot,
 } from "firebase/firestore";
-import { Category } from "../../store/category/category.reducer";
+import { Category } from "../../store/category/category.types";
 
 const firebaseConfig = {
   apiKey: "AIzaSyARdUo4Hh875aoVqWV9ORSGo-2HQtA-CDw",
@@ -58,19 +59,29 @@ export const addCollectionsAndDocuments = async (
   await batch.commit();
 };
 
-export const getCategoriesAndDocuments = async () => {
+export const getCategoriesAndDocuments = async (): Promise<Category[]> => {
   const collectionRef = collection(db, "categories");
   const q = query(collectionRef);
 
   const snapShot = await getDocs(q);
 
-  return snapShot.docs.map((docSnapShot) => docSnapShot.data());
+  return snapShot.docs.map((docSnapShot) => docSnapShot.data() as Category);
+};
+
+export type AdditionalInfo = {
+  displayName?: string;
+};
+
+export type UserData = {
+  createdAt: Date;
+  displayName: string;
+  email: string;
 };
 
 export const createUserDocumentFromAuth = async (
   userAuth: User,
-  additionalInfo = {}
-) => {
+  additionalInfo = {} as AdditionalInfo
+): Promise<void | QueryDocumentSnapshot<UserData>> => {
   const userDocRef = doc(db, "users", userAuth.uid);
 
   const userSnapshot = await getDoc(userDocRef);
@@ -91,7 +102,7 @@ export const createUserDocumentFromAuth = async (
       }
     }
   }
-  return userSnapshot;
+  return userSnapshot as QueryDocumentSnapshot<UserData>;
 };
 
 export const createAuthUserWithEmailAndPassword = async (

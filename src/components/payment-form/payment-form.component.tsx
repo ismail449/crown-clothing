@@ -29,9 +29,11 @@ const PaymentForm = () => {
       body: JSON.stringify({ amount: amount * 100 }),
     }).then((response) => response.json());
     const clientSecret = response.paymentIntent.client_secret;
+    const cardDetails = elements.getElement(CardElement);
+    if (cardDetails === null) return;
     const paymentResult = await stripe.confirmCardPayment(clientSecret, {
       payment_method: {
-        card: elements.getElement(CardElement)!,
+        card: cardDetails,
         billing_details: {
           name: user ? user.displayName : "Gust",
         },

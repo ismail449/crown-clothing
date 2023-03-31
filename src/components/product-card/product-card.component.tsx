@@ -1,5 +1,5 @@
 import Button from "../button/button.component";
-import { Product } from "../../store/category/category.reducer";
+import { Product } from "../../store/category/category.types";
 import { addCartItem } from "../../store/cart/cart.action";
 import {
   ProductCardContainer,

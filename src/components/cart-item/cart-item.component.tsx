@@ -1,4 +1,4 @@
-import React from "react";
+import { FC, memo } from "react";
 import { CartItemContainer, ItemDetails, Name } from "./cart-item.styles";
 
 type CartItemProps = {
@@ -8,18 +8,20 @@ type CartItemProps = {
   imageUrl: string;
 };
 
-const CartItem = ({ name, quantity, imageUrl, price }: CartItemProps) => {
-  return (
-    <CartItemContainer>
-      <img src={imageUrl} alt={name} />
-      <ItemDetails>
-        <Name>{name}</Name>
-        <span>
-          {quantity} x ${price}
-        </span>
-      </ItemDetails>
-    </CartItemContainer>
-  );
-};
+const CartItem: FC<CartItemProps> = memo(
+  ({ name, quantity, imageUrl, price }) => {
+    return (
+      <CartItemContainer>
+        <img src={imageUrl} alt={name} />
+        <ItemDetails>
+          <Name>{name}</Name>
+          <span>
+            {quantity} x ${price}
+          </span>
+        </ItemDetails>
+      </CartItemContainer>
+    );
+  }
+);
 
 export default CartItem;

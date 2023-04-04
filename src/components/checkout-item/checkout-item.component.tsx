@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { CartItem } from "../../store/cart/cart.custom-types";
 import {
   removeCartItem,
@@ -21,7 +22,7 @@ type CartItemProps = {
   cartItem: CartItem;
 };
 
-const CheckoutItem = ({ cartItem }: CartItemProps) => {
+const CheckoutItem = memo(({ cartItem }: CartItemProps) => {
   const dispatch = useDispatch();
   const cartItems = useSelector(selectCartItems);
 
@@ -47,6 +48,6 @@ const CheckoutItem = ({ cartItem }: CartItemProps) => {
       <RemoveButton onClick={clearItemHandler}>&#10005;</RemoveButton>
     </CheckoutItemContainer>
   );
-};
+});
 
 export default CheckoutItem;

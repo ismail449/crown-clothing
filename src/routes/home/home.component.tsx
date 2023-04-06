@@ -1,4 +1,3 @@
-import React from "react";
 import CategoriesList from "../../components/categories-list/categories-list.component";
 
 const Home = () => {
